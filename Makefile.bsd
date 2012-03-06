@@ -1,0 +1,39 @@
+PLAT = _bsd
+
+CC        = gcc
+CFLAGS    = -O3 -DMMAP -ansi -DPVM
+BLASLIB   = ./CLAPACK/lsblasppro1.1n_01.99.a
+#BLASLIB   = ./CLAPACK/blas$(PLAT).a
+LAPACKLIB = ./CLAPACK/lapack$(PLAT).a
+F2CLIB    = ./CLAPACK/F2CLIBS/libF77$(PLAT).a ./CLAPACK/F2CLIBS/libI77$(PLAT).a
+PVMLIB    = -L$(PVM_ROOT)/lib/$(PVM_ARCH) -lpvm3
+LIBS      = $(LAPACKLIB) $(BLASLIB) $(F2CLIB) $(PVMLIB) -lm
+INCLUDE   = -I$(PVM_ROOT)/include
+OBJS      = ica.o pvmica.o interfc.o memap.o r250.o randlcg.o dsum.o
+
+ica_bsd: Makefile.bsd ica.h pvmica.h memap.h $(OBJS)
+	$(CC) -o ica_bsd $(OBJS) $(LIBS)
+
+ica.o: Makefile.bsd ica.h pvmica.h memap.h ica.c
+	$(CC) -c ica.c $(CFLAGS) $(INCLUDE)
+
+pvmica.o: Makefile.bsd ica.h pvmica.h pvmica.c
+	$(CC) -c pvmica.c $(CFLAGS) $(INCLUDE)
+
+interfc.o: Makefile.bsd ica.h memap.h interfc.c
+	$(CC) -c interfc.c $(CFLAGS) $(INCLUDE)
+
+memap.o: Makefile.bsd memap.h memap.c
+	$(CC) -c memap.c $(CFLAGS) $(INCLUDE)
+
+r250.o: Makefile.bsd r250.h r250.c
+	$(CC) -c r250.c $(CFLAGS) $(INCLUDE)
+
+randlcg.o: Makefile.bsd randlcg.h randlcg.c
+	$(CC) -c randlcg.c $(CFLAGS) $(INCLUDE)
+
+dsum.o: Makefile.bsd dsum.c
+	$(CC) -c dsum.c $(CFLAGS) $(INCLUDE)
+
+clean:
+	rm -f *.o

@@ -1,0 +1,6 @@
+setenv PVM_ROOT /home/enghoff/pvm3
+setenv XPVM_ROOT $PVM_ROOT/xpvm
+setenv TCL_LIBRARY $PVM_ROOT/lib/tcl
+setenv TK_LIBRARY $PVM_ROOT/lib/tk
+setenv PVM_ARCH `$PVM_ROOT/lib/pvmgetarch`
+set path=($path $PVM_ROOT/bin/$PVM_ARCH)

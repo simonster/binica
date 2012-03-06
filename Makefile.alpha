@@ -1,0 +1,33 @@
+PLAT = _alpha
+
+CC        = cc
+CFLAGS    = -fast -DALPHA -DMMAP
+BLASLIB   = ./CLAPACK/blas$(PLAT).a
+LAPACKLIB = ./CLAPACK/lapack$(PLAT).a
+F2CLIB    = ./CLAPACK/F2CLIBS/libF77$(PLAT).a ./CLAPACK/F2CLIBS/libI77$(PLAT).a
+LIBS      = $(LAPACKLIB) $(BLASLIB) $(F2CLIB) -lm
+OBJS      = ica.o interfc.o memap.o r250.o randlcg.o dsum.o
+
+ica_alpha: Makefile.alpha ica.h memap.h $(OBJS)
+	$(CC) -o ica_alpha $(OBJS) $(CFLAGS) $(LIBS)
+
+ica.o: Makefile.alpha ica.h memap.h ica.c
+	$(CC) -c ica.c $(CFLAGS)
+
+interfc.o: Makefile.alpha ica.h memap.h interfc.c
+	$(CC) -c interfc.c $(CFLAGS)
+
+memap.o: Makefile.alpha memap.h memap.c
+	$(CC) -c memap.c $(CFLAGS)
+
+r250.o: Makefile.alpha r250.h r250.c
+	$(CC) -c r250.c $(CFLAGS)
+
+randlcg.o: Makefile.alpha randlcg.h randlcg.c
+	$(CC) -c randlcg.c $(CFLAGS)
+
+dsum.o: Makefile.alpha dsum.c
+	$(CC) -c dsum.c $(CFLAGS)
+
+clean:
+	rm -f *.o
